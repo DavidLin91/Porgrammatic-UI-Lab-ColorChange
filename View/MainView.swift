@@ -10,24 +10,58 @@ import UIKit
 
 class MainView: UIView {
     
-    public lazy var colorBox: UIView = {
-        let mainBox = UIView()
-        mainBox.frame.size.width = 200
-        mainBox.frame.size.height = 200
-        mainBox.backgroundColor = .systemBlue //have to change to combo color
+    var score = 0
+    var highScore = 0
+    
+    
+    // MARK: OBJECTS
+    
+    private var highScoreLabel: UILabel = {
+        let label = UILabel()
+        label.text = "HIGH SCORE:"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        return label
+    }()
+    
+    private var currentScoreLabel: UILabel = {
+        let label = UILabel()
+        label.text = "CURRENT SCORE:"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        return label
+    }()
+    
+    public lazy var highScoreLabelField: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.textAlignment = .center
+        label.text = highScore.description
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        return label
+    }()
+
+   public lazy var currentScoreLabelField: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.textAlignment = .center
+        label.text = score.description
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        return label
+    }()
+    
+    
+    // Random Color Box
+    public lazy var randomColorBox: UIImageView = {
+        let mainBox = UIImageView()
+        mainBox.backgroundColor = .white //have to change to combo color
         return mainBox
     }()
     
+    private lazy var stackView: UIStackView = {
     
-    public lazy var resetButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemYellow
-        button.setTitle("Reset", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        return button
     }()
     
     
+    // MARK: INITS
     override init(frame: CGRect) {
         super.init(frame: UIScreen.main.bounds)
         commonInit()
@@ -39,38 +73,66 @@ class MainView: UIView {
         commonInit()
     }
     
+    
     private func commonInit() {
         setupColorBoxConstraints()
-        setupResetButtonConstraints()
+        setupHighScoreTextConstraints()
+        setupCurrentScoreTextConstraints()
+        setupHighScoreConstraints()
+        setupCurrentScoreConstraints()
     }
     
+    
+    
+    // MARK: CONSTRAINTS
     private func setupColorBoxConstraints() {
-        addSubview(colorBox)
-        colorBox.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(randomColorBox)
+        randomColorBox.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            colorBox.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 30),
-            colorBox.centerXAnchor.constraint(equalTo: centerXAnchor)
-            
+            randomColorBox.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 30),
+            randomColorBox.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            randomColorBox.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            randomColorBox.heightAnchor.constraint(equalToConstant: 300)
         ])
     }
     
-    private func setupResetButtonConstraints() {
-        addSubview(resetButton)
-        
-        resetButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // resetButton.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        
-        // set constaints
+    private func setupHighScoreTextConstraints() {
+        addSubview(highScoreLabel)
+        highScoreLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        resetButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-        resetButton.topAnchor.constraint(equalTo: colorBox.bottomAnchor, constant: 40)
-        
+            highScoreLabel.topAnchor.constraint(equalTo: randomColorBox.bottomAnchor, constant: 40),
+            highScoreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
         ])
     }
-
+    
+    private func setupCurrentScoreTextConstraints() {
+        addSubview(currentScoreLabel)
+        currentScoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        currentScoreLabel.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 30),
+        currentScoreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
+        ])
+    }
+    
+    
+    private func setupHighScoreConstraints() {
+        addSubview(highScoreLabelField)
+        highScoreLabelField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        highScoreLabelField.topAnchor.constraint(equalTo: randomColorBox.bottomAnchor, constant: 40),
+        highScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
+        ])
+    }
+    
+    private func setupCurrentScoreConstraints() {
+        addSubview(currentScoreLabelField)
+        currentScoreLabelField.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        currentScoreLabelField.topAnchor.constraint(equalTo: highScoreLabelField.bottomAnchor, constant: 30),
+        currentScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
+        ])
+    }
     
     
     
