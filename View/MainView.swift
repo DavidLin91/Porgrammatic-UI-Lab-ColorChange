@@ -110,10 +110,13 @@ class MainView: UIView {
     
     private func colorButtons() -> [UIButton] {
         redButton.backgroundColor = .systemRed
+        redButton.tag = 0
         redButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         greenButton.backgroundColor = .systemGreen
+        greenButton.tag = 1
         greenButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         blueButton.backgroundColor = .systemBlue
+        blueButton.tag = 2
         blueButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         let allButtons = [redButton, greenButton, blueButton]
         return allButtons
@@ -125,7 +128,7 @@ class MainView: UIView {
             yourScore += 1
             yourScoreLabelField.text = String(yourScore)
             correctIncorrectLabel.text = "🎉 CORRECT 🎉"
-            randomNewColor()
+            mainBox.backgroundColor = randomNewColor()
             currentScore = yourScore
             
         } else if sender.tag != counter {
@@ -135,7 +138,6 @@ class MainView: UIView {
             correctIncorrectLabel.text = " 💀 GAME OVER 💀"
             if yourScore > highScore {
                 highScoreLabelField.text = yourScoreLabelField.text
-                print("here")
             } else {
                 highScoreLabelField.text = String(highScore)
             }
@@ -164,7 +166,7 @@ class MainView: UIView {
         redButton.isEnabled = true
         greenButton.isEnabled = true
         blueButton.isEnabled = true
-        randomNewColor()
+        mainBox.backgroundColor = randomNewColor()
         yourScore = 0
         yourScoreLabelField.text = "0"
     }
