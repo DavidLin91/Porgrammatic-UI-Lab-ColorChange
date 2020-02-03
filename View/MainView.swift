@@ -89,14 +89,13 @@ class MainView: UIView {
         return allButtons
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
+    private lazy var playAgainButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .black
+        button.titleLabel?.textColor = .white
+        button.setTitle("  Play Again  ", for: .normal)
+        return button
+    }()
     
     
     
@@ -121,6 +120,7 @@ class MainView: UIView {
         setupHighScoreConstraints()
         setupCurrentScoreConstraints()
         setupButtonStackViewConstraints()
+        playAgainButtonConstraints()
     }
     
     
@@ -196,7 +196,14 @@ class MainView: UIView {
         ])
     }
     
-    
+    private func playAgainButtonConstraints() {
+        addSubview(playAgainButton)
+        playAgainButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+        playAgainButton.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 40),
+        playAgainButton.centerXAnchor.constraint(equalTo: centerXAnchor)
+        ])
+    }
     
     
     
