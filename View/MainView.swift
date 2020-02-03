@@ -58,7 +58,7 @@ class MainView: UIView {
         let label = UILabel()
         label.backgroundColor = .white
         label.textAlignment = .center
-        label.text = "Correct or Incorrect"
+        label.text = "Start By Guessing A Color"
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         return label
     }()
