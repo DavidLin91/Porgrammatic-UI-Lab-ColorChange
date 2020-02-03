@@ -16,7 +16,7 @@ class MainView: UIView {
     
     
     // MARK: OBJECTS
- 
+    
     // Random Color Box
     public lazy var randomColorBox: UIImageView = {
         let mainBox = UIImageView()
@@ -25,12 +25,12 @@ class MainView: UIView {
     }()
     
     public lazy var correctIncorrectLabel: UILabel = {
-       let label = UILabel()
-       label.backgroundColor = .white
-       label.textAlignment = .center
-       label.text = "Correct or Incorrect"
-       label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-       return label
+        let label = UILabel()
+        label.backgroundColor = .white
+        label.textAlignment = .center
+        label.text = "Correct or Incorrect"
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        return label
     }()
     
     private var highScoreLabel: UILabel = {
@@ -55,8 +55,8 @@ class MainView: UIView {
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         return label
     }()
-
-   public lazy var currentScoreLabelField: UILabel = {
+    
+    public lazy var currentScoreLabelField: UILabel = {
         let label = UILabel()
         label.backgroundColor = .white
         label.textAlignment = .center
@@ -65,11 +65,39 @@ class MainView: UIView {
         return label
     }()
     
-
     
-//    private lazy var stackView: UIStackView = {
-//    
-//    }()
+    
+    private lazy var buttonStackView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: colorButtons())
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.alignment = .fill
+        stack.spacing = 30
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    
+    private func colorButtons() -> [UIButton] {
+        let redButton = UIButton()
+        redButton.backgroundColor = .systemRed
+        let greenButton = UIButton()
+        greenButton.backgroundColor = .systemGreen
+        let blueButton = UIButton()
+        blueButton.backgroundColor = .systemBlue
+        let allButtons = [redButton, greenButton, blueButton]
+        return allButtons
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     // MARK: INITS
@@ -92,7 +120,7 @@ class MainView: UIView {
         setupCurrentScoreTextConstraints()
         setupHighScoreConstraints()
         setupCurrentScoreConstraints()
-        
+        setupButtonStackViewConstraints()
     }
     
     
@@ -119,7 +147,7 @@ class MainView: UIView {
             correctIncorrectLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
-
+    
     private func setupHighScoreTextConstraints() {
         addSubview(highScoreLabel)
         highScoreLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -133,8 +161,8 @@ class MainView: UIView {
         addSubview(currentScoreLabel)
         currentScoreLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        currentScoreLabel.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 20),
-        currentScoreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
+            currentScoreLabel.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 20),
+            currentScoreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
         ])
     }
     
@@ -143,8 +171,8 @@ class MainView: UIView {
         addSubview(highScoreLabelField)
         highScoreLabelField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        highScoreLabelField.topAnchor.constraint(equalTo: correctIncorrectLabel.bottomAnchor, constant: 20),
-        highScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
+            highScoreLabelField.topAnchor.constraint(equalTo: correctIncorrectLabel.bottomAnchor, constant: 20),
+            highScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
         ])
     }
     
@@ -152,10 +180,24 @@ class MainView: UIView {
         addSubview(currentScoreLabelField)
         currentScoreLabelField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        currentScoreLabelField.topAnchor.constraint(equalTo: highScoreLabelField.bottomAnchor, constant: 20),
-        currentScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
+            currentScoreLabelField.topAnchor.constraint(equalTo: highScoreLabelField.bottomAnchor, constant: 20),
+            currentScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
         ])
     }
+    
+    private func setupButtonStackViewConstraints() {
+        addSubview(buttonStackView)
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            buttonStackView.topAnchor.constraint(equalTo: currentScoreLabel.bottomAnchor, constant: 20),
+            buttonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
+            buttonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+            buttonStackView.heightAnchor.constraint(equalToConstant: 80)
+        ])
+    }
+    
+    
+    
     
     
     
