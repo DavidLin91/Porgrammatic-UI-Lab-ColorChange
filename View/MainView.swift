@@ -18,24 +18,22 @@ class MainView: UIView {
     let redButton = UIButton()
     let greenButton = UIButton()
     let blueButton = UIButton()
-    
+    let mainBox = UIImageView()
     
     // MARK: OBJECTS
     
     // Random Color Box
     public lazy var randomColorBox: UIImageView = {
-        let mainBox = UIImageView()
-        mainBox.backgroundColor = randomColor()
+        mainBox.backgroundColor = randomNewColor()
         return mainBox
     }()
     
-    @objc private func randomColor() -> UIColor {
+    @objc private func randomNewColor() -> UIColor {
         let randNumRed = CGFloat.random(in: 0...1)
         let randNumGreen = CGFloat.random(in: 0...1)
         let randNumBlue = CGFloat.random(in: 0...1)
         let randNumAlpha = CGFloat.random(in: 0...1)
         let myColor = UIColor(red: randNumRed, green: randNumGreen, blue: randNumBlue, alpha: randNumAlpha)
-        return myColor
         
         let numRedInt:Float = Float(randNumRed)
         let numGreenInt:Float = Float(randNumGreen)
@@ -48,8 +46,10 @@ class MainView: UIView {
         } else if numBlueInt > numRedInt && numBlueInt > numGreenInt {
             counter = 2
         } else if numRedInt == numGreenInt && numRedInt == numBlueInt && numBlueInt == numGreenInt {
-            randomColor()
+            mainBox.backgroundColor = randomNewColor()
         }
+        
+        return myColor
     }
     
     
@@ -112,39 +112,34 @@ class MainView: UIView {
         redButton.backgroundColor = .systemRed
         redButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         greenButton.backgroundColor = .systemGreen
-        
-        
+        greenButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         blueButton.backgroundColor = .systemBlue
-        
-        
-        
+        blueButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         let allButtons = [redButton, greenButton, blueButton]
         return allButtons
     }
     
     @objc
     private func buttonPressed(_ sender: UIButton) {
-           if sender.tag == counter {
-               yourScore += 1
-               yourScoreLabelField.text = String(yourScore)
-               correctIncorrectLabel.text = "🎉 CORRECT 🎉"
-               randomColor()
-               currentScore = yourScore
-               
-           } else if sender.tag != counter {
-               redButton.isEnabled = false
-               greenButton.isEnabled = false
-              blueButton.isEnabled = false
-               correctIncorrectLabel.text = " 💀 GAME OVER 💀"
-               if yourScore > highScore {
-                   highScoreLabelField.text = yourScoreLabelField.text
-             print("here")
-               } else {
-                   highScoreLabelField.text = String(highScore)
-           }
-       }
-
-        
+        if sender.tag == counter {
+            yourScore += 1
+            yourScoreLabelField.text = String(yourScore)
+            correctIncorrectLabel.text = "🎉 CORRECT 🎉"
+            randomNewColor()
+            currentScore = yourScore
+            
+        } else if sender.tag != counter {
+            redButton.isEnabled = false
+            greenButton.isEnabled = false
+            blueButton.isEnabled = false
+            correctIncorrectLabel.text = " 💀 GAME OVER 💀"
+            if yourScore > highScore {
+                highScoreLabelField.text = yourScoreLabelField.text
+                print("here")
+            } else {
+                highScoreLabelField.text = String(highScore)
+            }
+        }
     }
     
     
@@ -152,9 +147,28 @@ class MainView: UIView {
         let button = UIButton()
         button.backgroundColor = .black
         button.titleLabel?.textColor = .white
+        button.addTarget(self, action: #selector(playAgainButtonPressed(_:)), for: .touchUpInside)
         button.setTitle("  Play Again  ", for: .normal)
         return button
     }()
+    
+    
+    @objc private func playAgainButtonPressed(_ sender: UIButton) {
+        if currentScore > highScore {
+            highScore = currentScore
+            highScoreLabelField.text = String(highScore)
+        } else if currentScore < highScore {
+            highScoreLabelField.text = String(highScore)
+        }
+        correctIncorrectLabel.text = " "
+        redButton.isEnabled = true
+        greenButton.isEnabled = true
+        blueButton.isEnabled = true
+        randomNewColor()
+        yourScore = 0
+        yourScoreLabelField.text = "0"
+    }
+    
     
     
     
@@ -217,11 +231,11 @@ class MainView: UIView {
     }
     
     private func setupCurrentScoreTextConstraints() {
-        addSubview(yourScore)
-        yourScore.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(yourScoreLabel)
+        yourScoreLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            yourScore.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 20),
-            yourScore.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
+            yourScoreLabel.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 20),
+            yourScoreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
         ])
     }
     
@@ -248,7 +262,7 @@ class MainView: UIView {
         addSubview(buttonStackView)
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonStackView.topAnchor.constraint(equalTo: yourScore.bottomAnchor, constant: 20),
+            buttonStackView.topAnchor.constraint(equalTo: yourScoreLabel.bottomAnchor, constant: 20),
             buttonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
             buttonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
             buttonStackView.heightAnchor.constraint(equalToConstant: 80)
@@ -263,10 +277,5 @@ class MainView: UIView {
             playAgainButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
-    
-    
-    
-    
-    
     
 }
