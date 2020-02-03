@@ -10,9 +10,14 @@ import UIKit
 
 class MainView: UIView {
     
-    var score = 0
-    var highScore = 0
     var currentScore = 0
+    var highScore = 0
+    var yourScore = 0
+    var counter = 0
+    
+    let redButton = UIButton()
+    let greenButton = UIButton()
+    let blueButton = UIButton()
     
     
     // MARK: OBJECTS
@@ -20,9 +25,34 @@ class MainView: UIView {
     // Random Color Box
     public lazy var randomColorBox: UIImageView = {
         let mainBox = UIImageView()
-        mainBox.backgroundColor = .white //have to change to combo color
+        mainBox.backgroundColor = randomColor()
         return mainBox
     }()
+    
+    @objc private func randomColor() -> UIColor {
+        let randNumRed = CGFloat.random(in: 0...1)
+        let randNumGreen = CGFloat.random(in: 0...1)
+        let randNumBlue = CGFloat.random(in: 0...1)
+        let randNumAlpha = CGFloat.random(in: 0...1)
+        let myColor = UIColor(red: randNumRed, green: randNumGreen, blue: randNumBlue, alpha: randNumAlpha)
+        return myColor
+        
+        let numRedInt:Float = Float(randNumRed)
+        let numGreenInt:Float = Float(randNumGreen)
+        let numBlueInt: Float = Float(randNumBlue)
+        
+        if numRedInt > numGreenInt && numRedInt > numBlueInt {
+            counter = 0
+        } else if numGreenInt > numRedInt && numGreenInt > numBlueInt {
+            counter = 1
+        } else if numBlueInt > numRedInt && numBlueInt > numGreenInt {
+            counter = 2
+        } else if numRedInt == numGreenInt && numRedInt == numBlueInt && numBlueInt == numGreenInt {
+            randomColor()
+        }
+    }
+    
+    
     
     public lazy var correctIncorrectLabel: UILabel = {
         let label = UILabel()
@@ -40,9 +70,9 @@ class MainView: UIView {
         return label
     }()
     
-    private var currentScoreLabel: UILabel = {
+    private var yourScoreLabel: UILabel = {
         let label = UILabel()
-        label.text = "CURRENT SCORE:"
+        label.text = "YOUR SCORE:"
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         return label
     }()
@@ -56,11 +86,11 @@ class MainView: UIView {
         return label
     }()
     
-    public lazy var currentScoreLabelField: UILabel = {
+    public lazy var yourScoreLabelField: UILabel = {
         let label = UILabel()
         label.backgroundColor = .white
         label.textAlignment = .center
-        label.text = score.description
+        label.text = currentScore.description
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         return label
     }()
@@ -79,15 +109,44 @@ class MainView: UIView {
     
     
     private func colorButtons() -> [UIButton] {
-        let redButton = UIButton()
         redButton.backgroundColor = .systemRed
-        let greenButton = UIButton()
+        redButton.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         greenButton.backgroundColor = .systemGreen
-        let blueButton = UIButton()
+        
+        
         blueButton.backgroundColor = .systemBlue
+        
+        
+        
         let allButtons = [redButton, greenButton, blueButton]
         return allButtons
     }
+    
+    @objc
+    private func buttonPressed(_ sender: UIButton) {
+           if sender.tag == counter {
+               yourScore += 1
+               yourScoreLabelField.text = String(yourScore)
+               correctIncorrectLabel.text = "🎉 CORRECT 🎉"
+               randomColor()
+               currentScore = yourScore
+               
+           } else if sender.tag != counter {
+               redButton.isEnabled = false
+               greenButton.isEnabled = false
+              blueButton.isEnabled = false
+               correctIncorrectLabel.text = " 💀 GAME OVER 💀"
+               if yourScore > highScore {
+                   highScoreLabelField.text = yourScoreLabelField.text
+             print("here")
+               } else {
+                   highScoreLabelField.text = String(highScore)
+           }
+       }
+
+        
+    }
+    
     
     private lazy var playAgainButton: UIButton = {
         let button = UIButton()
@@ -158,11 +217,11 @@ class MainView: UIView {
     }
     
     private func setupCurrentScoreTextConstraints() {
-        addSubview(currentScoreLabel)
-        currentScoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(yourScore)
+        yourScore.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            currentScoreLabel.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 20),
-            currentScoreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
+            yourScore.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 20),
+            yourScore.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
         ])
     }
     
@@ -177,11 +236,11 @@ class MainView: UIView {
     }
     
     private func setupCurrentScoreConstraints() {
-        addSubview(currentScoreLabelField)
-        currentScoreLabelField.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(yourScoreLabelField)
+        yourScoreLabelField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            currentScoreLabelField.topAnchor.constraint(equalTo: highScoreLabelField.bottomAnchor, constant: 20),
-            currentScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
+            yourScoreLabelField.topAnchor.constraint(equalTo: highScoreLabelField.bottomAnchor, constant: 20),
+            yourScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
         ])
     }
     
@@ -189,7 +248,7 @@ class MainView: UIView {
         addSubview(buttonStackView)
         buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            buttonStackView.topAnchor.constraint(equalTo: currentScoreLabel.bottomAnchor, constant: 20),
+            buttonStackView.topAnchor.constraint(equalTo: yourScore.bottomAnchor, constant: 20),
             buttonStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
             buttonStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
             buttonStackView.heightAnchor.constraint(equalToConstant: 80)
@@ -200,10 +259,12 @@ class MainView: UIView {
         addSubview(playAgainButton)
         playAgainButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        playAgainButton.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 40),
-        playAgainButton.centerXAnchor.constraint(equalTo: centerXAnchor)
+            playAgainButton.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 40),
+            playAgainButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
+    
+    
     
     
     
