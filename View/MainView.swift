@@ -12,9 +12,26 @@ class MainView: UIView {
     
     var score = 0
     var highScore = 0
+    var currentScore = 0
     
     
     // MARK: OBJECTS
+ 
+    // Random Color Box
+    public lazy var randomColorBox: UIImageView = {
+        let mainBox = UIImageView()
+        mainBox.backgroundColor = .white //have to change to combo color
+        return mainBox
+    }()
+    
+    public lazy var correctIncorrectLabel: UILabel = {
+       let label = UILabel()
+       label.backgroundColor = .white
+       label.textAlignment = .center
+       label.text = "Correct or Incorrect"
+       label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+       return label
+    }()
     
     private var highScoreLabel: UILabel = {
         let label = UILabel()
@@ -48,17 +65,11 @@ class MainView: UIView {
         return label
     }()
     
+
     
-    // Random Color Box
-    public lazy var randomColorBox: UIImageView = {
-        let mainBox = UIImageView()
-        mainBox.backgroundColor = .white //have to change to combo color
-        return mainBox
-    }()
-    
-    private lazy var stackView: UIStackView = {
-    
-    }()
+//    private lazy var stackView: UIStackView = {
+//    
+//    }()
     
     
     // MARK: INITS
@@ -76,10 +87,12 @@ class MainView: UIView {
     
     private func commonInit() {
         setupColorBoxConstraints()
+        setupCorrectIncorrectLabelConstraints()
         setupHighScoreTextConstraints()
         setupCurrentScoreTextConstraints()
         setupHighScoreConstraints()
         setupCurrentScoreConstraints()
+        
     }
     
     
@@ -88,7 +101,6 @@ class MainView: UIView {
     private func setupColorBoxConstraints() {
         addSubview(randomColorBox)
         randomColorBox.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             randomColorBox.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 30),
             randomColorBox.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
@@ -97,11 +109,22 @@ class MainView: UIView {
         ])
     }
     
+    private func setupCorrectIncorrectLabelConstraints() {
+        addSubview(correctIncorrectLabel)
+        correctIncorrectLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            correctIncorrectLabel.topAnchor.constraint(equalTo: randomColorBox.bottomAnchor, constant: 20),
+            correctIncorrectLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            correctIncorrectLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            correctIncorrectLabel.heightAnchor.constraint(equalToConstant: 30)
+        ])
+    }
+
     private func setupHighScoreTextConstraints() {
         addSubview(highScoreLabel)
         highScoreLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            highScoreLabel.topAnchor.constraint(equalTo: randomColorBox.bottomAnchor, constant: 40),
+            highScoreLabel.topAnchor.constraint(equalTo: correctIncorrectLabel.bottomAnchor, constant: 20),
             highScoreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
         ])
     }
@@ -110,7 +133,7 @@ class MainView: UIView {
         addSubview(currentScoreLabel)
         currentScoreLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        currentScoreLabel.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 30),
+        currentScoreLabel.topAnchor.constraint(equalTo: highScoreLabel.bottomAnchor, constant: 20),
         currentScoreLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30)
         ])
     }
@@ -120,7 +143,7 @@ class MainView: UIView {
         addSubview(highScoreLabelField)
         highScoreLabelField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        highScoreLabelField.topAnchor.constraint(equalTo: randomColorBox.bottomAnchor, constant: 40),
+        highScoreLabelField.topAnchor.constraint(equalTo: correctIncorrectLabel.bottomAnchor, constant: 20),
         highScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
         ])
     }
@@ -129,7 +152,7 @@ class MainView: UIView {
         addSubview(currentScoreLabelField)
         currentScoreLabelField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-        currentScoreLabelField.topAnchor.constraint(equalTo: highScoreLabelField.bottomAnchor, constant: 30),
+        currentScoreLabelField.topAnchor.constraint(equalTo: highScoreLabelField.bottomAnchor, constant: 20),
         currentScoreLabelField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30)
         ])
     }
